@@ -5,7 +5,7 @@ public class charecter : MonoBehaviour
 {
 
     public float speed = 0.5f;
-    private float blah = 2; //THIS IS THE TIMER FOR THE COURTINE FOR INTERACTIN ex:Mining
+    private float blah = 1.5f; //THIS IS THE TIMER FOR THE COURTINE FOR INTERACTIN ex:Mining
     private Rigidbody2D rb;
     private Collider2D myCollision;
     private Vector2 input;
@@ -22,8 +22,6 @@ public class charecter : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         myCollision = GetComponent<Collider2D>();
         InteractCircle.enabled = false;
-
-        StartCoroutine(interactTimer());
 
     }
 
@@ -49,15 +47,16 @@ public class charecter : MonoBehaviour
 
     private void Interact()
     {
-        if(copperTarget)
+        if(copperTarget && !isInteracting)
         {
             print("COPPER");
-            InteractCircle.enabled=true;
+            StartCoroutine(interactTimer());
+            
         }
-        if(iornTarget)
+        if(iornTarget && !isInteracting)
         {
             print("IORN");
-            InteractCircle.enabled = true;
+            StartCoroutine(interactTimer());
         }
     }
 
@@ -97,12 +96,23 @@ public class charecter : MonoBehaviour
 
     IEnumerator interactTimer()
     {
+        InteractCircle.enabled = true;
+        isInteracting = true;
         yield return new WaitForSeconds(blah); //MAGIC NUMBER TIME FOR INTERACTING
+        isInteracting = false;
+        InteractCircle.enabled = false;
     }
 
 
     private void FixedUpdate()
     {
-        rb.linearVelocity = input * speed;
+        if(!isInteracting)
+        {
+            rb.linearVelocity = input * speed;
+        }
+        else
+        {
+            rb.linearVelocity = input * 0;
+        }
     }
 }
