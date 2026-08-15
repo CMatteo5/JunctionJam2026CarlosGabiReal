@@ -1,5 +1,10 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.Collections;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,24 +19,30 @@ public class GameManager : MonoBehaviour
     public int playerHealth;
     [SerializeField] GameObject enemyRef;
 
+    public float wireThickness;
+
+    public List<PowerLines> allLines = new List<PowerLines> ();
+
     bool readyToSpawn;
-    public Transform playerTransform;
+    bool gracePeriod;
+    Transform playerTransform;
 
     [SerializeField]  float gracePeriodTime;
-    float enemySpawnTime;
+    public float enemySpawnTime;
     Vector3[] enemySpawns;
     int enemyThreshold = 5;
 
     [SerializeField] Image background;
-    [SerializeField] TextMeshPro text1;
-    [SerializeField] TextMeshPro text2;
-    [SerializeField] TextMeshPro text3;
+    [SerializeField] TextMeshProUGUI text1;
+    [SerializeField] TextMeshProUGUI text2;
+    [SerializeField] TextMeshProUGUI text3;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         readyToSpawn = false;
+        gracePeriod = true;
 
         playerIron = 0;
         playerCopper = 0;
@@ -44,6 +55,7 @@ public class GameManager : MonoBehaviour
             enemySpawns[i] = taggedObjects[i].transform.position;
         }
         StartCoroutine(startGame());
+        StartCoroutine(enemySpawnDelay(enemySpawnTime));
     }
 
     // Update is called once per frame
@@ -64,10 +76,15 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine(enemySpawnDelay(enemySpawnTime));
-            spawnEnemy();
+            gracePeriod = false;
         }
 
+        //Draw Power Lines
+        for (int i = 0; i < allLines.Count; i++)
+        {
+            allLines[i].renderer.SetPosition(0, allLines[i].start.position);
+            allLines[i].renderer.SetPosition(1,allLines[i].end.position);
+        }
 
     }
 
@@ -125,6 +142,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                Debug.Log("finding another location");
                 spawnEnemy();
                 return;
             }
@@ -157,23 +175,78 @@ public class GameManager : MonoBehaviour
 
     IEnumerator enemySpawnDelay(float time)
     {
-        yield return new WaitForSeconds(time);
-        readyToSpawn = true;
+        if (gracePeriod)
+        {
+            yield return new WaitForSeconds(gracePeriodTime);
+        }
+        while (true)
+        {
+            Debug.Log("Waiting to Spawn");
+            yield return new WaitForSeconds(time);
+            Debug.Log("Spawning...");
+            readyToSpawn = true;
+            spawnEnemy();
+        }
     }
 
     public Vector3 getRandomLocation()
     {
-        int randomIndex = Random.Range(0, enemySpawns.Length);
+        int randomIndex = UnityEngine.Random.Range(0, enemySpawns.Length);
         Vector3 randomLocation = enemySpawns[randomIndex];
         return randomLocation;
     }
 
+
+    //WORK ON THIS LATER***********************
     IEnumerator startGame()
     {
         yield return new WaitForSeconds(5);
         text1.enabled = false;
-        text2.enabled = true;
+        background.enabled= false;
+        //text2.enabled = true;
 
     } 
+
+    public PowerLines createPowerLine(GameObject caller, GameObject desiredConnection)
+    {
+        LineRenderer startingPoint = caller.GetComponent<LineRenderer>();
+        startingPoint.positionCount = 2;
+        startingPoint.startWidth = wireThickness;
+        startingPoint.endWidth = wireThickness;
+        PowerLines temp = ScriptableObject.CreateInstance<PowerLines>();
+        temp.renderer = startingPoint;
+        temp.start = caller.transform;
+        temp.end = desiredConnection.transform;
+        temp.lineID = generateID();
+        allLines.Add(temp);
+        return temp;
+    }
+
+    public string generateID()
+    {
+        int tempNum1 = UnityEngine.Random.Range(0, 10);
+        int tempNum2 = UnityEngine.Random.Range(0, 10);
+        int tempNum3 = UnityEngine.Random.Range(0, 10);
+        string result = $"{tempNum1}{tempNum2}{tempNum3}";
+        for (int i = 0; i < allLines.Count; i++)
+        {
+            if (result.Equals(allLines[i].name))
+            {
+                return generateID();
+            }
+        }
+        return result;
+    }
+
+    public void destroyPowerLine(string target)
+    {
+        for (int i = 0; i < allLines.Count; i++)
+        {
+            if (allLines[i].lineID == target)
+            {
+                allLines.RemoveAt(i);
+            }
+        }
+    }
 
 }
