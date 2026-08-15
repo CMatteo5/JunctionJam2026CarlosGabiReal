@@ -8,6 +8,9 @@ public class charecter : MonoBehaviour
     private Collider2D myCollision;
     private Vector2 input;
 
+    private bool copperTarget = false;
+    private bool iornTarget = false;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,16 +26,50 @@ public class charecter : MonoBehaviour
         input.y = Input.GetAxisRaw("Vertical");
 
         input.Normalize();
+
+
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Interact();
+        }
     }
 
 
-    public void OnCollisionEnter2D(Collision2D other)
+    private void Interact()
     {
-        
+        if(copperTarget)
+        {
+            print("COPPER");
+        }
+        if(iornTarget)
+        {
+            print("IORN");
+        }
     }
-    public void interact()
-    {
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("copper"))
+        {
+            copperTarget = true;
+        }
+        if(collision.CompareTag("iorn"))
+        {
+            iornTarget = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.CompareTag("copper"))
+        {
+            copperTarget = false;
+        }
+        if(collision.CompareTag("iorn"))
+        {
+            iornTarget= false;
+        }
     }
 
 
