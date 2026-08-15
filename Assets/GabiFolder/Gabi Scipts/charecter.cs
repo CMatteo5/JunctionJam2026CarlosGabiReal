@@ -1,15 +1,19 @@
+using System.Collections;
 using UnityEngine;
 
 public class charecter : MonoBehaviour
 {
 
     public float speed = 0.5f;
+    private float blah = 2; //THIS IS THE TIMER FOR THE COURTINE FOR INTERACTIN ex:Mining
     private Rigidbody2D rb;
     private Collider2D myCollision;
     private Vector2 input;
+    public SpriteRenderer InteractCircle;
 
     private bool copperTarget = false;
     private bool iornTarget = false;
+    private bool isInteracting = false;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -17,15 +21,22 @@ public class charecter : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         myCollision = GetComponent<Collider2D>();
+        InteractCircle.enabled = false;
+
+        StartCoroutine(interactTimer());
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        input.x = Input.GetAxisRaw("Horizontal");
-        input.y = Input.GetAxisRaw("Vertical");
+        if(!isInteracting)
+        {
+            input.x = Input.GetAxisRaw("Horizontal");
+            input.y = Input.GetAxisRaw("Vertical");
 
-        input.Normalize();
+            input.Normalize();
+        }
 
 
 
@@ -41,10 +52,12 @@ public class charecter : MonoBehaviour
         if(copperTarget)
         {
             print("COPPER");
+            InteractCircle.enabled=true;
         }
         if(iornTarget)
         {
             print("IORN");
+            InteractCircle.enabled = true;
         }
     }
 
@@ -72,7 +85,20 @@ public class charecter : MonoBehaviour
         }
     }
 
+    public void StopMovement()
+    {
+        isInteracting = true;
+    }
 
+    public void StartMovment()
+    {
+        isInteracting = false;
+    }
+
+    IEnumerator interactTimer()
+    {
+        yield return new WaitForSeconds(blah); //MAGIC NUMBER TIME FOR INTERACTING
+    }
 
 
     private void FixedUpdate()

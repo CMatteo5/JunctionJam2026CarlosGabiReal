@@ -8,6 +8,7 @@ TagManager:
   - copper
   - terain
   - enemy
+  - enemySpawn
   layers:
   - Default
   - TransparentFX
