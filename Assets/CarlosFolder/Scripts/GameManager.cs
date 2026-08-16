@@ -5,10 +5,12 @@ using System.Linq;
 using TMPro;
 using Unity.Collections;
 using Unity.Mathematics;
+using Unity.VectorGraphics;
 using Unity.VisualScripting;
 using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.Analytics;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static UnityEngine.UI.Image;
 
@@ -35,12 +37,15 @@ public class GameManager : MonoBehaviour
     Vector3[] enemySpawns;
     int enemyThreshold = 5;
 
+    public GameObject respawnArea;
+
     [SerializeField] Image background;
     [SerializeField] TextMeshProUGUI text1;
     [SerializeField] TextMeshProUGUI text2;
     [SerializeField] TextMeshProUGUI text3;
     [SerializeField] TextMeshProUGUI text4;
     [SerializeField] TextMeshProUGUI text5;
+    [SerializeField] TextMeshProUGUI youDiedText;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -139,7 +144,7 @@ public class GameManager : MonoBehaviour
         if (playerHealth < 0)
         {
             Debug.Log("You Died");
-            //Add a respawn later
+            StartCoroutine(respawn());
         }
     }
 
@@ -298,7 +303,7 @@ public class GameManager : MonoBehaviour
     private void winGame()
     {
         Debug.Log("You've won");
-        //SCENE CHANGE GOES HERE
+        SceneManager.LoadScene("ThanksForPlaying!");
     }
 
     public string generateID()
@@ -362,6 +367,14 @@ public class GameManager : MonoBehaviour
                 allLines.RemoveAt(i);
             }
         }
+    }
+
+    IEnumerator respawn()
+    {
+        PlayerRef.gameObject.SetActive(false);
+        yield return new WaitForSeconds(5);
+        PlayerRef.gameObject.transform.position = respawnArea.transform.position;
+        playerHealth = 25;
     }
 
 }
