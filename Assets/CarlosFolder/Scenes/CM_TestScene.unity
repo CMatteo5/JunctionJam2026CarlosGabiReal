@@ -542,10 +542,6 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 1499719327}
-    - target: {fileID: 429950282107290313, guid: 55c76b9dd5c7ae34fbac598b8a18bcd4, type: 3}
-      propertyPath: hasPower
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6565956537727798074, guid: 55c76b9dd5c7ae34fbac598b8a18bcd4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.58
@@ -790,6 +786,10 @@ PrefabInstance:
     - target: {fileID: 3021606987884772068, guid: 0ed848c9c1a032f41abedb45026c033a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3365695725176007204, guid: 0ed848c9c1a032f41abedb45026c033a, type: 3}
+      propertyPath: m_Radius
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7101514122677689995, guid: 0ed848c9c1a032f41abedb45026c033a, type: 3}
       propertyPath: m_Name
@@ -1425,6 +1425,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2173029275829967305, guid: 7f171304da187cb4fabbe652b78d64f7, type: 3}
+      propertyPath: m_Radius
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 3116968365217771874, guid: 7f171304da187cb4fabbe652b78d64f7, type: 3}
       propertyPath: m_Name
       value: Radar

@@ -55,7 +55,7 @@ public class Pylons : MonoBehaviour
 
     private void checkAround()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 3);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 4);
         //connections = new GameObject[hits.Length];
         for (int i = 0; i < hits.Length; i++)
         {
@@ -108,7 +108,7 @@ public class Pylons : MonoBehaviour
         }
         visited.Add(current);
 
-        Collider2D[] hits2 = Physics2D.OverlapCircleAll(current.transform.position, 3);
+        Collider2D[] hits2 = Physics2D.OverlapCircleAll(current.transform.position, 4);
 
 
         for (int i = 0; i < hits2.Length; i++)
