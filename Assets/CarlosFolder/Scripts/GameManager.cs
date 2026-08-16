@@ -281,6 +281,7 @@ public class GameManager : MonoBehaviour
 
     private void winGame()
     {
+        Debug.Log("You've won");
         //SCENE CHANGE GOES HERE
     }
 

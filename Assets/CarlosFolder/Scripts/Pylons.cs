@@ -64,7 +64,7 @@ public class Pylons : MonoBehaviour
                 continue;
             }
 
-            if (hits[i].gameObject.CompareTag("pylon") || hits[i].gameObject.CompareTag("gemstone") || hits[i].gameObject.CompareTag("generator"))
+            if (hits[i].gameObject.CompareTag("pylon") || hits[i].gameObject.CompareTag("gemstone") || hits[i].gameObject.CompareTag("generator") || hits[i].gameObject.CompareTag("radar"))
             {
                 if (manager.lineExistsBetween(this.transform, hits[i].gameObject.transform))
                 {

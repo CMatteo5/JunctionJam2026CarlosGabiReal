@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -18,7 +19,10 @@ public class Gemstones : MonoBehaviour
 
     [SerializeField] private List<string> connectionIDs = new List<string>();
 
+    [SerializeField] private GameObject door;
+
     private List<Gemstones> visited = new List<Gemstones>();
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,7 +39,11 @@ public class Gemstones : MonoBehaviour
         powerCheck();
         if (hasPower)
         {
-            //FUNCTIONALITY WHEN POWERED GOES HERE
+            door.SetActive(false);
+        }
+        else
+        {
+            door.SetActive(true);
         }
     }
 
