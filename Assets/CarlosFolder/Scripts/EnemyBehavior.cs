@@ -28,10 +28,13 @@ public class EnemyBehavior : MonoBehaviour
     public GameObject PlayerRef;
 
 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         PlayerRef = GameObject.Find("Player");
+        GameObject managerObject = GameObject.Find("GameManager");
+        manager = managerObject.GetComponent<GameManager>();
         StartCoroutine(retarget());
         StartCoroutine(scan());
         StartCoroutine(attackCheck());
