@@ -7,6 +7,7 @@ public class charecter : MonoBehaviour
     private Rigidbody2D rb;
     private Collider2D myCollision;
     private Vector2 input;
+    public Animator myAnim;
     public SpriteRenderer InteractCircle;
     private bool copperTarget = false;
     private bool iornTarget = false;
@@ -23,15 +24,21 @@ public class charecter : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         myCollision = GetComponent<Collider2D>();
         InteractCircle.enabled = false;
+        myAnim = GetComponent<Animator>();
     }
     // Update is called once per frame
     void Update()
     {
         if (!isInteracting)
         {
+            myAnim.Play("RunAstroNut");
             input.x = Input.GetAxisRaw("Horizontal");
             input.y = Input.GetAxisRaw("Vertical");
             input.Normalize();
+        }
+        else
+        {
+            myAnim.Play("IdleAstroNut");
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
