@@ -82,8 +82,11 @@ public class GameManager : MonoBehaviour
         //Draw Power Lines
         for (int i = 0; i < allLines.Count; i++)
         {
-            allLines[i].renderer.SetPosition(0, allLines[i].start.position);
-            allLines[i].renderer.SetPosition(1,allLines[i].end.position);
+            if (allLines[i] != null)
+            {
+                allLines[i].renderer.SetPosition(0, allLines[i].start.position);
+                allLines[i].renderer.SetPosition(1, allLines[i].end.position);
+            }
         }
 
     }
@@ -207,7 +210,7 @@ public class GameManager : MonoBehaviour
 
     } 
 
-    public PowerLines createPowerLine(GameObject caller, GameObject desiredConnection)
+    public PowerLines createPowerLine(GameObject caller, GameObject desiredConnection, bool isPowered)
     {
         LineRenderer startingPoint = caller.GetComponent<LineRenderer>();
         startingPoint.positionCount = 2;
@@ -218,6 +221,8 @@ public class GameManager : MonoBehaviour
         temp.start = caller.transform;
         temp.end = desiredConnection.transform;
         temp.lineID = generateID();
+        temp.source = caller;
+        temp.powered = isPowered;
         allLines.Add(temp);
         return temp;
     }

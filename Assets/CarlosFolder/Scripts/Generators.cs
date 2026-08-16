@@ -5,19 +5,22 @@ using UnityEngine;
 
 public class Generators : MonoBehaviour
 {
-    public bool hasPower;
+    [SerializeField] private bool hasPower;
 
-    public GameManager manager;
+    [SerializeField] private GameManager manager;
     public GameObject[] connections;
 
-    public List<PowerLines> localPowerLines = new List<PowerLines>();
-    public CircleCollider2D powerRadius;
+    [SerializeField] private List<PowerLines> localPowerLines = new List<PowerLines>();
+    private CircleCollider2D powerRadius;
 
     public List<string> connectionIDs = new List<string>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        GameObject managerObject = GameObject.Find("GameManager");
+        manager = managerObject.GetComponent<GameManager>();
+        hasPower = true;
         checkAround();
         StartCoroutine(radiusCheck());
     }
@@ -69,7 +72,7 @@ public class Generators : MonoBehaviour
         {
             if (connections[i] != null)
             {
-                localPowerLines.Add(manager.createPowerLine(this.gameObject, connections[i]));
+                localPowerLines.Add(manager.createPowerLine(this.gameObject, connections[i],hasPower));
             }
         }
 
