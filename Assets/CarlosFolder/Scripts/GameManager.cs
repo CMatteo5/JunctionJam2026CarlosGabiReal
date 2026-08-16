@@ -7,6 +7,7 @@ using Unity.Collections;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UI;
 using static UnityEngine.UI.Image;
 
@@ -79,15 +80,17 @@ public class GameManager : MonoBehaviour
             gracePeriod = false;
         }
 
-        //Draw Power Lines
+        // Draw Power Lines
         for (int i = 0; i < allLines.Count; i++)
         {
-            if (allLines[i] != null)
+            // 💡 Check if the line itself exists, AND if its start/end transforms still exist
+            if (allLines[i] != null && allLines[i].start != null && allLines[i].end != null)
             {
                 allLines[i].renderer.SetPosition(0, allLines[i].start.position);
                 allLines[i].renderer.SetPosition(1, allLines[i].end.position);
             }
         }
+
 
     }
 
@@ -184,9 +187,9 @@ public class GameManager : MonoBehaviour
         }
         while (true)
         {
-            Debug.Log("Waiting to Spawn");
+            //Debug.Log("Waiting to Spawn");
             yield return new WaitForSeconds(time);
-            Debug.Log("Spawning...");
+            //Debug.Log("Spawning...");
             readyToSpawn = true;
             spawnEnemy();
         }
@@ -243,14 +246,31 @@ public class GameManager : MonoBehaviour
         return result;
     }
 
+    public void cleanUpAllLists()
+    {
+        for (int i = 0; i < allLines.Count; i++)
+        {
+            if (allLines[i] == null || allLines[i].start == null || allLines[i].end == null)
+            {
+                allLines.RemoveAt(i);
+                continue;
+            }
+        }
+    }
+
     public void destroyPowerLine(string target)
     {
         for (int i = 0; i < allLines.Count; i++)
         {
-            if (allLines[i].lineID == target)
+
+            if (allLines[i].lineID.Equals(target))
             {
+                Debug.Log("Hello from destroyPowerLine");
                 allLines.RemoveAt(i);
+                break;
             }
+
+            cleanUpAllLists();
         }
     }
 

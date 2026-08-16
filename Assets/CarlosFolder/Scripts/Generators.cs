@@ -8,7 +8,7 @@ public class Generators : MonoBehaviour
     [SerializeField] private bool hasPower;
 
     [SerializeField] private GameManager manager;
-    public GameObject[] connections;
+    //public GameObject[] connections;
 
     [SerializeField] private List<PowerLines> localPowerLines = new List<PowerLines>();
     private CircleCollider2D powerRadius;
@@ -44,7 +44,7 @@ public class Generators : MonoBehaviour
     public void checkAround()
     {
         RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 5, Vector2.right, 5);
-        connections = new GameObject[hits.Length];
+        //connections = new GameObject[hits.Length];
         for (int i = 0; i < hits.Length; i++)
         {
             bool same = false;
@@ -64,17 +64,18 @@ public class Generators : MonoBehaviour
                     same = false;
                     continue;
                 }
-                connections[i] = hits[i].collider.gameObject;
+                //connections[i] = hits[i].collider.gameObject;
+                localPowerLines.Add(manager.createPowerLine(this.gameObject, hits[i].collider.gameObject, hasPower));
             }
         }
 
-        for (int i = 0; i < connections.Length; i++)
-        {
-            if (connections[i] != null)
-            {
-                localPowerLines.Add(manager.createPowerLine(this.gameObject, connections[i],hasPower));
-            }
-        }
+        //for (int i = 0; i < connections.Length; i++)
+        //{
+        //    if (connections[i] != null)
+        //    {
+        //        localPowerLines.Add(manager.createPowerLine(this.gameObject, connections[i],hasPower));
+        //    }
+        //}
 
     } 
 
