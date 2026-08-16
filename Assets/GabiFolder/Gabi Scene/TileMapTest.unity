@@ -115310,6 +115310,37 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d86aa454478fb043b78522a36a51960, type: 3}
+--- !u!1 &1305483784
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1305483785}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1305483785
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1305483784}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.22, y: 9.32, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1348853933
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -115746,6 +115777,10 @@ PrefabInstance:
       propertyPath: PlayerRef
       value: 
       objectReference: {fileID: 765892113}
+    - target: {fileID: 1882421986221141062, guid: a77d48a00aa97fc44b8b9d1b4247d3d4, type: 3}
+      propertyPath: respawnArea
+      value: 
+      objectReference: {fileID: 1305483784}
     - target: {fileID: 1992065482135939634, guid: a77d48a00aa97fc44b8b9d1b4247d3d4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.46385
@@ -115948,3 +115983,4 @@ SceneRoots:
   - {fileID: 765892112}
   - {fileID: 1357767359}
   - {fileID: 1364880031}
+  - {fileID: 1305483785}
