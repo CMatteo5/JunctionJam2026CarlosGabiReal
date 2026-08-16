@@ -87,7 +87,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 5815479284261728410, guid: 3482b3f271a10f74aa2017804b1e6c63, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -140,6 +140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::charecter
   speed: 10
+  myAnim: {fileID: 0}
   InteractCircle: {fileID: 3276535162793674838}
   buildMode: 0
   canPlace: 0
