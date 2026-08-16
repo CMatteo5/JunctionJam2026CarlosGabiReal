@@ -13,6 +13,7 @@ TagManager:
   - generator
   - pylon
   - gemstone
+  - radar
   layers:
   - Default
   - TransparentFX

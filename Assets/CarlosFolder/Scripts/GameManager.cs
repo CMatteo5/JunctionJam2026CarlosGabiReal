@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        checkWinCondition();
     }
 
     private void FixedUpdate()
@@ -85,7 +85,6 @@ public class GameManager : MonoBehaviour
         // Draw Power Lines
         for (int i = 0; i < allLines.Count; i++)
         {
-            // 💡 Check if the line itself exists, AND if its start/end transforms still exist
             if (allLines[i] != null && allLines[i].start != null && allLines[i].end != null)
             {
                 allLines[i].renderer.SetPosition(0, allLines[i].start.position);
@@ -258,6 +257,31 @@ public class GameManager : MonoBehaviour
         temp.powered = isPowered;
         allLines.Add(temp);
         return temp;
+    }
+
+    public int connectedGenerators;
+
+    private void checkWinCondition()
+    {
+        Generators[] allGenerators = FindObjectsByType<Generators>(FindObjectsSortMode.None);
+        connectedGenerators = 0;
+        for (int i = 0; i < allGenerators.Length; i++)
+        {
+            if (allGenerators[i].reachesRadar())
+            {
+                connectedGenerators++;
+            }
+        }
+
+        if (allGenerators.Length > 0 && connectedGenerators == allGenerators.Length)
+        {
+            winGame();
+        }
+    }
+
+    private void winGame()
+    {
+        //SCENE CHANGE GOES HERE
     }
 
     public string generateID()

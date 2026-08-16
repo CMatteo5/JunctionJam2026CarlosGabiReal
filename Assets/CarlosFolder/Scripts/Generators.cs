@@ -31,6 +31,40 @@ public class Generators : MonoBehaviour
     {
         hasPower = !hasPower;
     }
+    public bool reachesRadar()
+    {
+        List<GameObject> visited = new List<GameObject>();
+        return radarWalk(this.gameObject, visited);
+    }
+    private bool radarWalk(GameObject current, List<GameObject> visited)
+    {
+        if (visited.Contains(current))
+        {
+            return false;
+        }
+        visited.Add(current);
+
+        Collider2D[] hits = Physics2D.OverlapCircleAll(current.transform.position, 5);
+        for (int i = 0; i < hits.Length; i++)
+        {
+            if (hits[i].gameObject == current)
+            {
+                continue;
+            }
+            if (hits[i].gameObject.CompareTag("radar"))
+            {
+                return true;
+            }
+            if (hits[i].gameObject.CompareTag("pylon") || hits[i].gameObject.CompareTag("generator"))
+            {
+                if (radarWalk(hits[i].gameObject, visited))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     private void checkAround()
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 5);
