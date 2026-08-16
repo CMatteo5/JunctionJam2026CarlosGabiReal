@@ -211,6 +211,10 @@ public class GameManager : MonoBehaviour
 
     private void tempDevMode()
     {
+        if(text1 == null)
+        {
+            return;
+        }
         text1.enabled = false;
         background.enabled = false;
         introActive = false;
