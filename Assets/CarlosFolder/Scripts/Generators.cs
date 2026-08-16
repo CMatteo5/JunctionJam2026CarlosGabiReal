@@ -44,7 +44,7 @@ public class Generators : MonoBehaviour
         }
         visited.Add(current);
 
-        Collider2D[] hits = Physics2D.OverlapCircleAll(current.transform.position, 5);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(current.transform.position, 3);
         for (int i = 0; i < hits.Length; i++)
         {
             if (hits[i].gameObject == current)
@@ -67,7 +67,7 @@ public class Generators : MonoBehaviour
     }
     private void checkAround()
     {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 5);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 3);
         //connections = new GameObject[hits.Length];
         for (int i = 0; i < hits.Length; i++)
         {
