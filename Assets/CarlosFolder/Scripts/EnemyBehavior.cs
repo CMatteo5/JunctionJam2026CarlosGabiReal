@@ -25,10 +25,13 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] private GameObject currentTarget;
     private Vector3 currentTargetPosition;
 
+    public GameObject PlayerRef;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        PlayerRef = GameObject.Find("Player");
         StartCoroutine(retarget());
         StartCoroutine(scan());
         StartCoroutine(attackCheck());
@@ -109,7 +112,7 @@ public class EnemyBehavior : MonoBehaviour
     {
         while (true)
         {
-            Debug.Log("Finding target...");
+            //Debug.Log("Finding target...");
             if (playerTargets.Count > 0)
             {
                 currentTarget = playerTargets[0].gameObject;
@@ -124,7 +127,7 @@ public class EnemyBehavior : MonoBehaviour
             {
                 setRandom();
             }
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(.5f);
         }
     }
 
@@ -173,9 +176,15 @@ public class EnemyBehavior : MonoBehaviour
         }
     }
 
+    private void OnMouseDown()
+    {
+        if(!PlayerRef.gameObject.GetComponent<charecter>().iornTarget && !PlayerRef.gameObject.GetComponent<charecter>().copperTarget&&!PlayerRef.gameObject.GetComponent<charecter>().buildMode&& !PlayerRef.gameObject.GetComponent<charecter>().isInteracting)
+        {
+            Destroy(gameObject);
+        }
+    }
 
 
-    
 
 
 }

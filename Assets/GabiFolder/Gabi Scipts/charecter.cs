@@ -10,9 +10,9 @@ public class charecter : MonoBehaviour
     public Animator myAnim;
     private bool isMoving = false;
     public SpriteRenderer InteractCircle;
-    private bool copperTarget = false;
-    private bool iornTarget = false;
-    private bool isInteracting = false;
+    public bool copperTarget = false;
+    public bool iornTarget = false;
+    public bool isInteracting = false;
     public bool buildMode = false;
     public bool canPlace = false;
     [SerializeField] private GameObject pylonPrefab;
