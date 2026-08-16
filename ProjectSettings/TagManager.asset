@@ -9,6 +9,10 @@ TagManager:
   - terain
   - enemy
   - enemySpawn
+  - door
+  - generator
+  - pylon
+  - gemstone
   layers:
   - Default
   - TransparentFX
