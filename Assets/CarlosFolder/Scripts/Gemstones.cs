@@ -5,7 +5,7 @@ using Unity.Properties;
 using UnityEditor.Tilemaps;
 using UnityEngine;
 
-public class Pylons : MonoBehaviour
+public class Gemstones : MonoBehaviour
 {
     [SerializeField] private bool hasPower;
 
@@ -14,24 +14,17 @@ public class Pylons : MonoBehaviour
 
     [SerializeField] private List<PowerLines> localPowerLines = new List<PowerLines>();
 
-    [SerializeField] private List<PowerLines> tempLines = new List<PowerLines>();
-
     private CircleCollider2D powerRadius;
-
-    [SerializeField] private int pylonHealth;
-
-    [SerializeField] private GameObject brokenPylon;
 
     [SerializeField] private List<string> connectionIDs = new List<string>();
 
-    private List<Pylons> visited = new List<Pylons>();
+    private List<Gemstones> visited = new List<Gemstones>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         GameObject managerObject = GameObject.Find("GameManager");
         manager = managerObject.GetComponent<GameManager>();
-        pylonHealth = 50;
         checkAround();
         StartCoroutine(radiusCheck());
     }
@@ -40,7 +33,10 @@ public class Pylons : MonoBehaviour
     void Update()
     {
         powerCheck();
-        healthCheck();
+        if (hasPower)
+        {
+            //FUNCTIONALITY WHEN POWERED GOES HERE
+        }
     }
 
     public bool getPower()
@@ -94,13 +90,7 @@ public class Pylons : MonoBehaviour
         }
     }
 
-    public bool reachesGenerator()
-    {
-        visited.Clear();
-        return breakdownCheck(this);
-    }
-
-    private bool breakdownCheck(Pylons current)
+    private bool breakdownCheck(Gemstones current)
     {
         if (visited.Contains(current))
         {
@@ -121,10 +111,10 @@ public class Pylons : MonoBehaviour
             {
 
                 Pylons nextPylon = hits2[i].gameObject.GetComponent<Pylons>();
-                if (nextPylon != null && nextPylon != current)
+                if (nextPylon != null)
                 {
 
-                    if (breakdownCheck(nextPylon))
+                    if (nextPylon.reachesGenerator())
                     {
                         return true;
                     }
@@ -144,16 +134,6 @@ public class Pylons : MonoBehaviour
             checkAround();
         }
 
-    }
-
-    private void healthCheck()
-    {
-        if (pylonHealth <= 0)
-        {
-            Instantiate(brokenPylon, transform.position, transform.rotation);
-            manager.destroyLinesTouching(transform);
-            Destroy(gameObject);
-        }
     }
 
 }
