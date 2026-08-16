@@ -22,7 +22,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4366730570133759929
 Transform:
   m_ObjectHideFlags: 0
@@ -142,6 +142,9 @@ MonoBehaviour:
   speed: 10
   myAnim: {fileID: 0}
   InteractCircle: {fileID: 3276535162793674838}
+  copperTarget: 0
+  iornTarget: 0
+  isInteracting: 0
   buildMode: 0
   canPlace: 0
   pylonPrefab: {fileID: 7101514122677689995, guid: 0ed848c9c1a032f41abedb45026c033a, type: 3}

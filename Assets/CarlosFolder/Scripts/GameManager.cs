@@ -371,10 +371,11 @@ public class GameManager : MonoBehaviour
 
     IEnumerator respawn()
     {
-        PlayerRef.gameObject.SetActive(false);
+        PlayerRef.SetActive(false);
         yield return new WaitForSeconds(5);
         PlayerRef.gameObject.transform.position = respawnArea.transform.position;
         playerHealth = 25;
+        PlayerRef.SetActive(true);
     }
 
 }

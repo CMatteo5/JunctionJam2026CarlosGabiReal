@@ -739,6 +739,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00fcc81c1b640e844b485c0351718a95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::charecter
+--- !u!1 &1281410694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1281410695}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1281410695
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281410694}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6, y: 4.1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1289237648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1023,6 +1054,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 3786161012805942192, guid: 06af78fdc88904348a00759322c4afd7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4366730570133759929, guid: 06af78fdc88904348a00759322c4afd7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.8214018
@@ -1121,12 +1156,14 @@ MonoBehaviour:
   allLines: []
   gracePeriodTime: 20
   enemySpawnTime: 5
+  respawnArea: {fileID: 1281410694}
   background: {fileID: 714241247}
   text1: {fileID: 1333082910}
   text2: {fileID: 0}
   text3: {fileID: 0}
   text4: {fileID: 0}
   text5: {fileID: 0}
+  youDiedText: {fileID: 0}
   connectedGenerators: 0
 --- !u!1001 &1583120786
 PrefabInstance:
@@ -1778,3 +1815,4 @@ SceneRoots:
   - {fileID: 1623790526}
   - {fileID: 441455187}
   - {fileID: 6649265610654951557}
+  - {fileID: 1281410695}
