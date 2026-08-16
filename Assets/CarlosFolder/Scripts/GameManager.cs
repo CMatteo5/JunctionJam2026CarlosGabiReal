@@ -6,6 +6,7 @@ using TMPro;
 using Unity.Collections;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.UI;
@@ -59,7 +60,8 @@ public class GameManager : MonoBehaviour
         {
             enemySpawns[i] = taggedObjects[i].transform.position;
         }
-        StartCoroutine(startGame());
+        //StartCoroutine(startGame());
+        tempDevMode();
         StartCoroutine(enemySpawnDelay(enemySpawnTime));
     }
 
@@ -136,6 +138,7 @@ public class GameManager : MonoBehaviour
         playerHealth -= amount;
         if (playerHealth < 0)
         {
+            Debug.Log("You Died");
             //Add a respawn later
         }
     }
@@ -204,6 +207,13 @@ public class GameManager : MonoBehaviour
         int randomIndex = UnityEngine.Random.Range(0, enemySpawns.Length);
         Vector3 randomLocation = enemySpawns[randomIndex];
         return randomLocation;
+    }
+
+    private void tempDevMode()
+    {
+        text1.enabled = false;
+        background.enabled = false;
+        introActive = false;
     }
 
 

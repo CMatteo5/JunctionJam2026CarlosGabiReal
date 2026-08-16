@@ -14,7 +14,7 @@ public class EnemyBehavior : MonoBehaviour
     [SerializeField] private List<GameObject> playerTargets;
 
     [SerializeField] private float speed = 5f;
-    [SerializeField] private float stoppingDistance = 1f; 
+    [SerializeField] private float stoppingDistance = .25f; 
 
     [SerializeField] private float attackCooldownTime = 2f;
 
@@ -30,8 +30,8 @@ public class EnemyBehavior : MonoBehaviour
     void Start()
     {
         StartCoroutine(retarget());
+        StartCoroutine(scan());
         StartCoroutine(attackCheck());
-
     }
 
     // Update is called once per frame
@@ -42,7 +42,7 @@ public class EnemyBehavior : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
             playerTargets.Add(collision.gameObject);
         }else if (collision.gameObject.CompareTag("pylon"))
@@ -53,23 +53,26 @@ public class EnemyBehavior : MonoBehaviour
 
     IEnumerator attackCheck()
     {
-        yield return new WaitForSeconds(attackCooldownTime);
-        Collider2D[] hits2 = Physics2D.OverlapCircleAll(transform.position, 1.5f);
-        if (hits2 != null)
+        while (true)
         {
-            for (int i = 0; i < hits2.Length; i++)
+            yield return new WaitForSeconds(attackCooldownTime);
+            Collider2D[] hits2 = Physics2D.OverlapCircleAll(transform.position, 1.5f);
+            if (hits2 != null)
             {
-                if (hits2[i].gameObject.CompareTag("player"))
+                for (int i = 0; i < hits2.Length; i++)
                 {
-                    attackPlayer();
-                }
-                else if(hits2[i].gameObject.CompareTag("pylon"))
-                {
-                    attackPylon(hits2[i].gameObject);
-                }
-                else
-                {
-                    continue;
+                    if (hits2[i].gameObject.CompareTag("Player"))
+                    {
+                        attackPlayer();
+                    }
+                    else if (hits2[i].gameObject.CompareTag("pylon"))
+                    {
+                        attackPylon(hits2[i].gameObject);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
         }
@@ -77,33 +80,52 @@ public class EnemyBehavior : MonoBehaviour
 
     private void attackPlayer()
     {
-        manager.playerLoseHealth(attackDamage);
+        if (manager.getHealth() > attackDamage)
+        {
+            manager.playerLoseHealth(attackDamage);
+        }
+        else
+        {
+            manager.playerLoseHealth(attackDamage);
+            playerTargets.Clear();
+            setRandom();
+        }
     }
     private void attackPylon(GameObject temp)
     {
-        temp.GetComponent<Pylons>().decreaseHealth(attackDamage);
+        if (temp.GetComponent<Pylons>().pylonHealth > 0)
+        {
+            temp.GetComponent<Pylons>().decreaseHealth(attackDamage);
+        }
+        else
+        {
+            temp.GetComponent<Pylons>().decreaseHealth(attackDamage);
+            pylonTargets.Clear();
+            setRandom();
+        }
     }
 
     IEnumerator retarget()
     {
-        if(playerTargets.Count > 0)
+        while (true)
         {
-            currentTarget = playerTargets[0].gameObject;
-            currentTargetPosition = currentTarget.transform.position;
-        }else if(pylonTargets.Count > 0)
-        {
-            currentTarget = pylonTargets[0].gameObject;
-            currentTargetPosition = currentTarget.transform.position;
+            Debug.Log("Finding target...");
+            if (playerTargets.Count > 0)
+            {
+                currentTarget = playerTargets[0].gameObject;
+                currentTargetPosition = currentTarget.transform.position;
+            }
+            else if (pylonTargets.Count > 0)
+            {
+                currentTarget = pylonTargets[0].gameObject;
+                currentTargetPosition = currentTarget.transform.position;
+            }
+            else
+            {
+                setRandom();
+            }
+            yield return new WaitForSeconds(1);
         }
-        else
-        {
-            Vector2 minBounds = new Vector2(-10f, -10f);
-            Vector2 maxBounds = new Vector2(10f, 10f);
-            float randomX = Random.Range(minBounds.x, maxBounds.x);
-            float randomY = Random.Range(minBounds.y, maxBounds.y);
-            currentTargetPosition = new Vector3(randomX, randomY, 0);
-        }
-        yield return new WaitForSeconds(10);
     }
 
     private void moveToCurrentTarget()
@@ -112,6 +134,42 @@ public class EnemyBehavior : MonoBehaviour
         if (distance > stoppingDistance)
         {
             transform.position = Vector2.MoveTowards(transform.position, currentTargetPosition, speed * Time.deltaTime);
+        }
+    }
+
+    private void setRandom()
+    {
+        Vector2 minBounds = new Vector2(-10f, -10f);
+        Vector2 maxBounds = new Vector2(10f, 10f);
+        float randomX = Random.Range(minBounds.x, maxBounds.x);
+        float randomY = Random.Range(minBounds.y, maxBounds.y);
+        currentTargetPosition = new Vector3(randomX, randomY, 0);
+    }
+
+    IEnumerator scan()
+    {
+        while (true)
+        {
+            Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 10);
+            if (hits != null)
+            {
+                for (int i = 0; i < hits.Length; i++)
+                {
+                    if (hits[i].gameObject.CompareTag("Player"))
+                    {
+                        playerTargets.Add(hits[i].gameObject);
+                    }
+                    else if (hits[i].gameObject.CompareTag("pylon"))
+                    {
+                        pylonTargets.Add(hits[i].gameObject);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+            yield return new WaitForSeconds(1);
         }
     }
 

@@ -18,7 +18,7 @@ public class Pylons : MonoBehaviour
 
     private CircleCollider2D powerRadius;
 
-    [SerializeField] private int pylonHealth;
+    [SerializeField] public int pylonHealth;
 
     [SerializeField] private GameObject brokenPylon;
 
