@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI text1;
     [SerializeField] TextMeshProUGUI text2;
     [SerializeField] TextMeshProUGUI text3;
+    [SerializeField] TextMeshProUGUI text4;
+    [SerializeField] TextMeshProUGUI text5;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

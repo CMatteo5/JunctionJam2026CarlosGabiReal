@@ -156,4 +156,9 @@ public class Pylons : MonoBehaviour
         }
     }
 
+    public void decreaseHealth(int amount)
+    {
+        pylonHealth -= amount;
+    }
+
 }

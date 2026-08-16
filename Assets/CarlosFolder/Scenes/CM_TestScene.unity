@@ -887,6 +887,7 @@ GameObject:
   - component: {fileID: 1298307134}
   - component: {fileID: 1298307133}
   - component: {fileID: 1298307132}
+  - component: {fileID: 1298307137}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: enemy
@@ -1087,6 +1088,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1298307137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298307131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449bf68463dae374dadcc64bfbb445e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyBehavior
+  detectRadius: {fileID: 0}
+  attackRadius: {fileID: 0}
+  pylonTargets: []
+  playerTargets: []
+  speed: 5
+  stoppingDistance: 1
+  attackCooldownTime: 2
+  manager: {fileID: 1499719327}
+  attackDamage: 5
+  currentTarget: {fileID: 0}
 --- !u!1 &1333082908
 GameObject:
   m_ObjectHideFlags: 0
@@ -1338,6 +1361,8 @@ MonoBehaviour:
   text1: {fileID: 1333082910}
   text2: {fileID: 0}
   text3: {fileID: 0}
+  text4: {fileID: 0}
+  text5: {fileID: 0}
   connectedGenerators: 0
 --- !u!1001 &1583120786
 PrefabInstance:
