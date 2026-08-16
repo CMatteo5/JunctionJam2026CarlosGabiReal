@@ -8,6 +8,7 @@ public class charecter : MonoBehaviour
     private Collider2D myCollision;
     private Vector2 input;
     public Animator myAnim;
+    private bool isMoving = false;
     public SpriteRenderer InteractCircle;
     private bool copperTarget = false;
     private bool iornTarget = false;
@@ -31,14 +32,16 @@ public class charecter : MonoBehaviour
     {
         if (!isInteracting)
         {
-            myAnim.Play("RunAstroNut");
+            isMoving = true;
+            myAnim.SetBool("isMoving", isMoving);
             input.x = Input.GetAxisRaw("Horizontal");
             input.y = Input.GetAxisRaw("Vertical");
             input.Normalize();
         }
         else
         {
-            myAnim.Play("IdleAstroNut");
+            isMoving = false;
+            myAnim.SetBool("isMoving", isMoving);
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
