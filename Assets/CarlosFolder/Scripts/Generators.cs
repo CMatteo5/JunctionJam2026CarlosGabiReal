@@ -2,19 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Tilemaps;
 using UnityEngine;
-
 public class Generators : MonoBehaviour
 {
     [SerializeField] private bool hasPower;
-
     [SerializeField] private GameManager manager;
     //public GameObject[] connections;
-
     [SerializeField] private List<PowerLines> localPowerLines = new List<PowerLines>();
     private CircleCollider2D powerRadius;
-
     public List<string> connectionIDs = new List<string>();
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -24,51 +19,48 @@ public class Generators : MonoBehaviour
         checkAround();
         StartCoroutine(radiusCheck());
     }
-
     // Update is called once per frame
     void Update()
     {
-        
     }
-
     public bool getPower()
     {
         return hasPower;
     }
-
     public void flip()
     {
         hasPower = !hasPower;
     }
-
-    public void checkAround()
+    private void checkAround()
     {
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 5, Vector2.right, 5);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 5);
         //connections = new GameObject[hits.Length];
         for (int i = 0; i < hits.Length; i++)
         {
-            bool same = false;
-            if (hits[i].collider.gameObject.CompareTag("pylon") || hits[i].collider.gameObject.CompareTag("gemstone")|| hits[i].collider.gameObject.CompareTag("generator"))
+            if (hits[i].gameObject == this.gameObject)
             {
-                for (int j = 0; j <localPowerLines.Count; j++)
+                continue;
+            }
+            bool same = false;
+            if (hits[i].gameObject.CompareTag("pylon") || hits[i].gameObject.CompareTag("gemstone") || hits[i].gameObject.CompareTag("generator"))
+            {
+                for (int j = 0; j < localPowerLines.Count; j++)
                 {
-                    if (hits[i].collider.gameObject.transform == localPowerLines[j].end)
+                    if (hits[i].gameObject.transform == localPowerLines[j].end || hits[i].gameObject.transform == localPowerLines[j].start)
                     {
                         same = true;
                         break;
                     }
                 }
-
                 if (same)
                 {
                     same = false;
                     continue;
                 }
                 //connections[i] = hits[i].collider.gameObject;
-                localPowerLines.Add(manager.createPowerLine(this.gameObject, hits[i].collider.gameObject, hasPower));
+                localPowerLines.Add(manager.createPowerLine(this.gameObject, hits[i].gameObject, hasPower));
             }
         }
-
         //for (int i = 0; i < connections.Length; i++)
         //{
         //    if (connections[i] != null)
@@ -76,10 +68,7 @@ public class Generators : MonoBehaviour
         //        localPowerLines.Add(manager.createPowerLine(this.gameObject, connections[i],hasPower));
         //    }
         //}
-
-    } 
-
-
+    }
     IEnumerator radiusCheck()
     {
         while (true)
@@ -87,7 +76,5 @@ public class Generators : MonoBehaviour
             yield return new WaitForSeconds(30);
             checkAround();
         }
-        
     }
-
 }

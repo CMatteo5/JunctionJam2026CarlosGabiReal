@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class Pylons : MonoBehaviour
 {
-    public bool hasPower;
+    [SerializeField] private bool hasPower;
 
     [SerializeField] private GameManager manager;
     //[SerializeField] private GameObject[] connections;
@@ -18,13 +18,13 @@ public class Pylons : MonoBehaviour
 
     private CircleCollider2D powerRadius;
 
-    [SerializeField]private int pylonHealth;
+    [SerializeField] private int pylonHealth;
 
     [SerializeField] private GameObject brokenPylon;
 
     [SerializeField] private List<string> connectionIDs = new List<string>();
 
-    public List<string> visited = new List<string>();
+    private List<Pylons> visited = new List<Pylons>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,6 +39,7 @@ public class Pylons : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        powerCheck();
         healthCheck();
     }
 
@@ -52,30 +53,24 @@ public class Pylons : MonoBehaviour
         hasPower = !hasPower;
     }
 
-    public void checkAround()
+    private void checkAround()
     {
-        RaycastHit2D[] hits = Physics2D.CircleCastAll(transform.position, 5, Vector2.right, 5);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 5);
         //connections = new GameObject[hits.Length];
         for (int i = 0; i < hits.Length; i++)
         {
-            bool same = false;
-            if (hits[i].collider.gameObject.CompareTag("pylon") || hits[i].collider.gameObject.CompareTag("gemstone") || hits[i].collider.gameObject.CompareTag("generator"))
+            if (hits[i].gameObject == this.gameObject)
             {
-                for (int j = 0; j < localPowerLines.Count; j++)
-                {
-                    if (hits[i].collider.gameObject.transform == localPowerLines[j].end)
-                    {
-                        same = true;
-                        break;
-                    }
-                }
+                continue;
+            }
 
-                if (same)
+            if (hits[i].gameObject.CompareTag("pylon") || hits[i].gameObject.CompareTag("gemstone") || hits[i].gameObject.CompareTag("generator"))
+            {
+                if (manager.lineExistsBetween(this.transform, hits[i].gameObject.transform))
                 {
-                    same = false;
                     continue;
                 }
-                localPowerLines.Add(manager.createPowerLine(this.gameObject, hits[i].collider.gameObject, hasPower));
+                localPowerLines.Add(manager.createPowerLine(this.gameObject, hits[i].gameObject, hasPower));
             }
         }
 
@@ -83,7 +78,7 @@ public class Pylons : MonoBehaviour
         //{
         //    if (connections[i] != null)
         //    {
-                
+
         //    }
         //}
 
@@ -91,42 +86,45 @@ public class Pylons : MonoBehaviour
 
     private void powerCheck()
     {
+        visited.Clear();
+        hasPower = breakdownCheck(this);
         for (int i = 0; i < localPowerLines.Count; i++)
         {
-            if (localPowerLines[i].powered)
-            {
-                hasPower = true;
-                return;
-            }
-            hasPower= false;
+            localPowerLines[i].powered = hasPower;
         }
     }
 
     private bool breakdownCheck(Pylons current)
     {
+        if (visited.Contains(current))
+        {
+            return false;
+        }
+        visited.Add(current);
 
-        RaycastHit2D[] hits2 = Physics2D.CircleCastAll(transform.position, 5, Vector2.right, 5);
+        Collider2D[] hits2 = Physics2D.OverlapCircleAll(current.transform.position, 5);
 
 
         for (int i = 0; i < hits2.Length; i++)
         {
-            if (hits2[i].collider.gameObject.CompareTag("generator"))
+            if (hits2[i].gameObject.CompareTag("generator"))
             {
-                hasPower = true;
                 return true;
             }
-            else if (hits2[i].collider.gameObject.CompareTag("pylon"))
+            else if (hits2[i].gameObject.CompareTag("pylon"))
             {
 
-                Pylons nextPylon = hits2[i].collider.gameObject.GetComponent<Pylons>();
-                if (nextPylon != null && nextPylon != this)
+                Pylons nextPylon = hits2[i].gameObject.GetComponent<Pylons>();
+                if (nextPylon != null && nextPylon != current)
                 {
 
-                    hasPower = breakdownCheck(nextPylon);
+                    if (breakdownCheck(nextPylon))
+                    {
+                        return true;
+                    }
                 }
             }
         }
-        hasPower = false;
         return false;
     }
 
@@ -136,30 +134,18 @@ public class Pylons : MonoBehaviour
     {
         while (true)
         {
-            if (hasPower) {
-                yield return new WaitForSeconds(30);
-                checkAround();
-            }
-            else
-            {
-                yield return null;
-            }
+            yield return new WaitForSeconds(30);
+            checkAround();
         }
 
     }
 
-    public void healthCheck()
+    private void healthCheck()
     {
-        if (pylonHealth<=0)
+        if (pylonHealth <= 0)
         {
-            tempLines = new List<PowerLines> ();
-            Instantiate(brokenPylon);
-            for (int i = 0; i < localPowerLines.Count; i++)
-            {
-                tempLines.Add(localPowerLines[i]);
-                manager.destroyPowerLine(localPowerLines[i].lineID);
-            }
-
+            Instantiate(brokenPylon, transform.position, transform.rotation);
+            manager.destroyLinesTouching(transform);
             Destroy(gameObject);
         }
     }

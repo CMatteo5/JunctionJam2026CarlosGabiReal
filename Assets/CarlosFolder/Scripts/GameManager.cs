@@ -22,13 +22,14 @@ public class GameManager : MonoBehaviour
 
     public float wireThickness;
 
-    public List<PowerLines> allLines = new List<PowerLines> ();
+    public List<PowerLines> allLines = new List<PowerLines>();
 
     bool readyToSpawn;
     bool gracePeriod;
+    bool introActive;
     Transform playerTransform;
 
-    [SerializeField]  float gracePeriodTime;
+    [SerializeField] float gracePeriodTime;
     public float enemySpawnTime;
     Vector3[] enemySpawns;
     int enemyThreshold = 5;
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviour
     {
         readyToSpawn = false;
         gracePeriod = true;
+        introActive = true;
 
         playerIron = 0;
         playerCopper = 0;
@@ -61,8 +63,8 @@ public class GameManager : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
-        
+    {
+
     }
 
     private void FixedUpdate()
@@ -101,7 +103,7 @@ public class GameManager : MonoBehaviour
 
     public void addIron(int amount)
     {
-        playerIron+= amount;
+        playerIron += amount;
     }
     public void removeIron(int amount)
     {
@@ -115,7 +117,7 @@ public class GameManager : MonoBehaviour
 
     public void addCopper(int amount)
     {
-        playerCopper+= amount;
+        playerCopper += amount;
     }
 
     public void removeCopper(int amount)
@@ -139,11 +141,12 @@ public class GameManager : MonoBehaviour
 
     public void spawnEnemy()
     {
-        if (readyToSpawn) {
+        if (readyToSpawn)
+        {
             Vector3 selectedLocation = getRandomLocation();
             if (areaCheck(selectedLocation))
             {
-                Instantiate(enemyRef,selectedLocation, transform.rotation);
+                Instantiate(enemyRef, selectedLocation, transform.rotation);
                 readyToSpawn = false;
             }
             else
@@ -208,19 +211,46 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         text1.enabled = false;
-        background.enabled= false;
+        background.enabled = false;
+        introActive = false;
         //text2.enabled = true;
 
-    } 
+    }
+
+    public bool getIntroActive()
+    {
+        return introActive;
+    }
+
+    public bool lineExistsBetween(Transform a, Transform b)
+    {
+        for (int i = 0; i < allLines.Count; i++)
+        {
+            if (allLines[i] == null)
+            {
+                continue;
+            }
+            if ((allLines[i].start == a && allLines[i].end == b) || (allLines[i].start == b && allLines[i].end == a))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public PowerLines createPowerLine(GameObject caller, GameObject desiredConnection, bool isPowered)
     {
-        LineRenderer startingPoint = caller.GetComponent<LineRenderer>();
+        GameObject lineHolder = new GameObject("PowerLine");
+        LineRenderer startingPoint = lineHolder.AddComponent<LineRenderer>();
         startingPoint.positionCount = 2;
         startingPoint.startWidth = wireThickness;
         startingPoint.endWidth = wireThickness;
+        startingPoint.material = new Material(Shader.Find("Sprites/Default"));
+        startingPoint.startColor = Color.black;
+        startingPoint.endColor = Color.black;
         PowerLines temp = ScriptableObject.CreateInstance<PowerLines>();
         temp.renderer = startingPoint;
+        temp.lineObject = lineHolder;
         temp.start = caller.transform;
         temp.end = desiredConnection.transform;
         temp.lineID = generateID();
@@ -266,11 +296,30 @@ public class GameManager : MonoBehaviour
             if (allLines[i].lineID.Equals(target))
             {
                 Debug.Log("Hello from destroyPowerLine");
+                if (allLines[i].lineObject != null)
+                {
+                    Destroy(allLines[i].lineObject);
+                }
                 allLines.RemoveAt(i);
                 break;
             }
 
             cleanUpAllLists();
+        }
+    }
+
+    public void destroyLinesTouching(Transform node)
+    {
+        for (int i = allLines.Count - 1; i >= 0; i--)
+        {
+            if (allLines[i] == null || allLines[i].start == node || allLines[i].end == node)
+            {
+                if (allLines[i] != null && allLines[i].lineObject != null)
+                {
+                    Destroy(allLines[i].lineObject);
+                }
+                allLines.RemoveAt(i);
+            }
         }
     }
 

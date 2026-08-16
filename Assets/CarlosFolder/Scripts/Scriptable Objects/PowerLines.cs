@@ -1,5 +1,4 @@
 using UnityEngine;
-
 [CreateAssetMenu(fileName = "PowerLines", menuName = "Scriptable Objects/PowerLines")]
 public class PowerLines : ScriptableObject
 {
@@ -8,6 +7,7 @@ public class PowerLines : ScriptableObject
     public GameObject source;
     public bool powered;
     public LineRenderer renderer;
+    public GameObject lineObject;
     public Transform start;
-    public Transform end;   
+    public Transform end;
 }
