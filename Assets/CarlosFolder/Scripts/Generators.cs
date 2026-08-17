@@ -43,7 +43,6 @@ public class Generators : MonoBehaviour
             return false;
         }
         visited.Add(current);
-
         Collider2D[] hits = Physics2D.OverlapCircleAll(current.transform.position, 4);
         for (int i = 0; i < hits.Length; i++)
         {
@@ -75,23 +74,12 @@ public class Generators : MonoBehaviour
             {
                 continue;
             }
-            bool same = false;
-            if (hits[i].gameObject.CompareTag("pylon") || hits[i].gameObject.CompareTag("gemstone") || hits[i].gameObject.CompareTag("generator"))
+            if (hits[i].gameObject.CompareTag("pylon") || hits[i].gameObject.CompareTag("gemstone") || hits[i].gameObject.CompareTag("generator") || hits[i].gameObject.CompareTag("radar"))
             {
-                for (int j = 0; j < localPowerLines.Count; j++)
+                if (manager.lineExistsBetween(this.transform, hits[i].gameObject.transform))
                 {
-                    if (hits[i].gameObject.transform == localPowerLines[j].end || hits[i].gameObject.transform == localPowerLines[j].start)
-                    {
-                        same = true;
-                        break;
-                    }
-                }
-                if (same)
-                {
-                    same = false;
                     continue;
                 }
-                //connections[i] = hits[i].collider.gameObject;
                 localPowerLines.Add(manager.createPowerLine(this.gameObject, hits[i].gameObject, hasPower));
             }
         }

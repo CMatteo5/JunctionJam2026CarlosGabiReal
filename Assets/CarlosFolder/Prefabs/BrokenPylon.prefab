@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8153101498600243359}
   - component: {fileID: 7488313460213716570}
   - component: {fileID: -4531142682459485829}
+  - component: {fileID: -8918395381046692029}
   m_Layer: 0
   m_Name: BrokenPylon
   m_TagString: Untagged
@@ -115,3 +116,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-8918395381046692029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6674698820196409612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603c21dc9620b5544b91a4a24cd70362, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BrokenPylon
+  lifetime: 20

@@ -31,7 +31,7 @@ public class Pylons : MonoBehaviour
     {
         GameObject managerObject = GameObject.Find("GameManager");
         manager = managerObject.GetComponent<GameManager>();
-        pylonHealth = 50;
+        pylonHealth = 200;
         checkAround();
         StartCoroutine(radiusCheck());
     }

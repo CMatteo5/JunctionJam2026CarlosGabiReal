@@ -15,6 +15,8 @@ public class charecter : MonoBehaviour
     public bool isInteracting = false;
     public bool buildMode = false;
     public bool canPlace = false;
+    public bool dead = false;
+    private SpriteRenderer spriteRenderer;
     [SerializeField] private GameObject pylonPrefab;
     private GameManager manager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,10 +28,15 @@ public class charecter : MonoBehaviour
         myCollision = GetComponent<Collider2D>();
         InteractCircle.enabled = false;
         myAnim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
     // Update is called once per frame
     void Update()
     {
+        if (dead)
+        {
+            return;
+        }
         if (!isInteracting)
         {
             isMoving = true;
@@ -59,6 +66,27 @@ public class charecter : MonoBehaviour
             }
         }
     }
+    public void setDead(bool state)
+    {
+        dead = state;
+        input = Vector2.zero;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+        }
+        if (myCollision != null)
+        {
+            myCollision.enabled = !state;
+        }
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.enabled = !state;
+        }
+        if (myAnim != null)
+        {
+            myAnim.enabled = !state;
+        }
+    }
     public bool canAfford()
     {
         return manager.getIron() >= 1 && manager.getCopper() >= 1;
@@ -77,12 +105,14 @@ public class charecter : MonoBehaviour
         if (copperTarget && !isInteracting)
         {
             manager.addCopper(1);
+            manager.playInteract();
             StartCoroutine(interactTimer());
 
         }
         if (iornTarget && !isInteracting)
         {
             manager.addIron(1);
+            manager.playInteract();
             StartCoroutine(interactTimer());
         }
     }
@@ -132,11 +162,17 @@ public class charecter : MonoBehaviour
         Instantiate(pylonPrefab, spawnPosition, Quaternion.identity);
         manager.removeIron(1);
         manager.removeCopper(1);
+        manager.playInteract();
         isInteracting = false;
         InteractCircle.enabled = false;
     }
     private void FixedUpdate()
     {
+        if (dead)
+        {
+            rb.linearVelocity = Vector2.zero;
+            return;
+        }
         if (!isInteracting)
         {
             rb.linearVelocity = input * speed;

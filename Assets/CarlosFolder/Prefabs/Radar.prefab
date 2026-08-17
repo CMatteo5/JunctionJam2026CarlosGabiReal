@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1040958652223177293}
   - component: {fileID: 2173029275829967305}
   - component: {fileID: -977552328538294042}
+  - component: {fileID: 7334626043736117664}
   m_Layer: 0
   m_Name: Radar
   m_TagString: radar
@@ -176,7 +177,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.21133333}
-  m_Radius: 5
+  m_Radius: 3
 --- !u!95 &-977552328538294042
 Animator:
   serializedVersion: 7
@@ -199,3 +200,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7334626043736117664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3116968365217771874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64de10bbef389874b8c36829ea29e735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Radars
+  manager: {fileID: 0}

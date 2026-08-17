@@ -1164,6 +1164,12 @@ MonoBehaviour:
   text4: {fileID: 0}
   text5: {fileID: 0}
   youDiedText: {fileID: 0}
+  musicSource: {fileID: 0}
+  sfxSource: {fileID: 0}
+  industrialMusic: {fileID: 0}
+  enemyDeathClip: {fileID: 0}
+  interactClip: {fileID: 0}
+  laserClips: []
   connectedGenerators: 0
 --- !u!1001 &1583120786
 PrefabInstance:
@@ -1299,6 +1305,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7334626043736117664, guid: 7f171304da187cb4fabbe652b78d64f7, type: 3}
+      propertyPath: manager
+      value: 
+      objectReference: {fileID: 1499719327}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

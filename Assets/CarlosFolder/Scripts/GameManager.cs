@@ -47,6 +47,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI text5;
     [SerializeField] TextMeshProUGUI youDiedText;
 
+    [SerializeField] TextMeshProUGUI ironText;
+    [SerializeField] TextMeshProUGUI copperText;
+    [SerializeField] TextMeshProUGUI healthText;
+
+    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioClip industrialMusic;
+    [SerializeField] private AudioClip enemyDeathClip;
+    [SerializeField] private AudioClip interactClip;
+    [SerializeField] private AudioClip[] laserClips;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -55,9 +66,17 @@ public class GameManager : MonoBehaviour
         gracePeriod = true;
         introActive = true;
 
+        text1.enabled = true;
+        text2.enabled = false;
+        text3.enabled = false;
+        text4.enabled = false;
+        text5.enabled = false;
+        youDiedText.enabled = false;
+
         playerIron = 0;
         playerCopper = 0;
         playerHealth = 25;
+        updateUI();
 
         GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("enemySpawn");
         enemySpawns = new Vector3[taggedObjects.Length];
@@ -65,9 +84,16 @@ public class GameManager : MonoBehaviour
         {
             enemySpawns[i] = taggedObjects[i].transform.position;
         }
-        //StartCoroutine(startGame());
-        tempDevMode();
+        StartCoroutine(startGame());
+        //tempDevMode();
         StartCoroutine(enemySpawnDelay(enemySpawnTime));
+
+        if (musicSource != null && industrialMusic != null)
+        {
+            musicSource.clip = industrialMusic;
+            musicSource.loop = true;
+            musicSource.Play();
+        }
     }
 
     // Update is called once per frame
@@ -109,13 +135,31 @@ public class GameManager : MonoBehaviour
         return playerIron;
     }
 
+    public void updateUI()
+    {
+        if (ironText != null)
+        {
+            ironText.text = "Iron: " + playerIron.ToString();
+        }
+        if (copperText != null)
+        {
+            copperText.text = "Copper: " + playerCopper.ToString();
+        }
+        if (healthText != null)
+        {
+            healthText.text = "Health: " + playerHealth.ToString();
+        }
+    }
+
     public void addIron(int amount)
     {
         playerIron += amount;
+        updateUI();
     }
     public void removeIron(int amount)
     {
         playerIron -= amount;
+        updateUI();
     }
 
     public int getCopper()
@@ -126,11 +170,13 @@ public class GameManager : MonoBehaviour
     public void addCopper(int amount)
     {
         playerCopper += amount;
+        updateUI();
     }
 
     public void removeCopper(int amount)
     {
         playerCopper -= amount;
+        updateUI();
     }
 
     public int getHealth()
@@ -138,10 +184,17 @@ public class GameManager : MonoBehaviour
         return playerHealth;
     }
 
+    private bool isRespawning;
+
     public void playerLoseHealth(int amount)
     {
+        if (isRespawning)
+        {
+            return;
+        }
         playerHealth -= amount;
-        if (playerHealth < 0)
+        updateUI();
+        if (playerHealth <= 0)
         {
             Debug.Log("You Died");
             StartCoroutine(respawn());
@@ -216,7 +269,7 @@ public class GameManager : MonoBehaviour
 
     private void tempDevMode()
     {
-        if(text1 == null)
+        if (text1 == null)
         {
             return;
         }
@@ -231,15 +284,50 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(5);
         text1.enabled = false;
+        text2.enabled = true;
+        yield return new WaitForSeconds(5);
+        text2.enabled = false;
+        text3.enabled = true;
+        yield return new WaitForSeconds(5);
+        text3.enabled = false;
+        text4.enabled = true;
+        yield return new WaitForSeconds(5);
+        text4.enabled = false;
+        text5.enabled = true;
+        yield return new WaitForSeconds(5);
+        text5.enabled = false;
         background.enabled = false;
         introActive = false;
-        //text2.enabled = true;
-
     }
 
     public bool getIntroActive()
     {
         return introActive;
+    }
+
+    public void playEnemyDeath()
+    {
+        if (sfxSource != null && enemyDeathClip != null)
+        {
+            sfxSource.PlayOneShot(enemyDeathClip);
+        }
+    }
+
+    public void playInteract()
+    {
+        if (sfxSource != null && interactClip != null)
+        {
+            sfxSource.PlayOneShot(interactClip);
+        }
+    }
+
+    public void playLaser()
+    {
+        if (sfxSource != null && laserClips != null && laserClips.Length > 0)
+        {
+            int index = UnityEngine.Random.Range(0, laserClips.Length);
+            sfxSource.PlayOneShot(laserClips[index]);
+        }
     }
 
     public bool lineExistsBetween(Transform a, Transform b)
@@ -281,9 +369,15 @@ public class GameManager : MonoBehaviour
     }
 
     public int connectedGenerators;
+    private bool hasWon;
 
     private void checkWinCondition()
     {
+        if (hasWon)
+        {
+            return;
+        }
+
         Generators[] allGenerators = FindObjectsByType<Generators>(FindObjectsSortMode.None);
         connectedGenerators = 0;
         for (int i = 0; i < allGenerators.Length; i++)
@@ -296,6 +390,7 @@ public class GameManager : MonoBehaviour
 
         if (allGenerators.Length > 0 && connectedGenerators == allGenerators.Length)
         {
+            hasWon = true;
             winGame();
         }
     }
@@ -371,11 +466,15 @@ public class GameManager : MonoBehaviour
 
     IEnumerator respawn()
     {
-        PlayerRef.SetActive(false);
+        isRespawning = true;
+        charecter playerScript = PlayerRef.GetComponent<charecter>();
+        playerScript.setDead(true);
         yield return new WaitForSeconds(5);
         PlayerRef.gameObject.transform.position = respawnArea.transform.position;
         playerHealth = 25;
-        PlayerRef.SetActive(true);
+        updateUI();
+        playerScript.setDead(false);
+        isRespawning = false;
     }
 
 }
