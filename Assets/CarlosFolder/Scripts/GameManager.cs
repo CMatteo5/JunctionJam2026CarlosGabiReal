@@ -7,7 +7,6 @@ using Unity.Collections;
 using Unity.Mathematics;
 using Unity.VectorGraphics;
 using Unity.VisualScripting;
-using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
