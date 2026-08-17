@@ -65,6 +65,16 @@ public class charecter : MonoBehaviour
                 Interact();
             }
         }
+
+        //flip
+        if(input.x < 0)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (input.x > 0)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
     }
     public void setDead(bool state)
     {

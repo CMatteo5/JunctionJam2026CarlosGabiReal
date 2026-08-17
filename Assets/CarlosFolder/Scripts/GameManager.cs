@@ -282,19 +282,19 @@ public class GameManager : MonoBehaviour
     //WORK ON THIS LATER***********************
     IEnumerator startGame()
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(8);
         text1.enabled = false;
         text2.enabled = true;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(8);
         text2.enabled = false;
         text3.enabled = true;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(8);
         text3.enabled = false;
         text4.enabled = true;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(7);
         text4.enabled = false;
         text5.enabled = true;
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(7);
         text5.enabled = false;
         background.enabled = false;
         introActive = false;
